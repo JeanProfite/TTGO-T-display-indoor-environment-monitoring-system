@@ -1,0 +1,223 @@
+<!DOCTYPE HTML><html>
+<!--  For highcharts usage see here: https://api.highcharts.com/class-reference/Highcharts.Chart 
+      After mofifiing this file you have to Build Filessystem Image and Upload Filessystem Image to the flash memory-->
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <style>
+    body {
+      min-width: 310px;
+    	max-width: 800px;
+    	height: 400px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-family: Arial;
+      font-size: 2.5rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>ESP Indoor Air Quality Monitor</h1>
+  <div id="chart-temperature" class="container"></div>
+  <div id="chart-humidity" class="container"></div>
+  <div id="chart-pressure" class="container"></div>
+  <div id="chart-eCO2" class="container"></div>
+  <div id="chart-TVOC" class="container"></div>
+</body>
+<script>
+var chartT = new Highcharts.Chart({
+  chart:{ renderTo : 'chart-temperature' },
+  title: { text: 'Temperature' },
+  subtitle: { text: 'BME280'},
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+    series: { color: '#059e8a' }
+  },
+  xAxis: { type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'BME280 Temperature (Celsius)' }
+    //title: { text: 'Temperature (Fahrenheit)' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      if(chartT.series[0].data.length > 50) {
+        chartT.series[0].addPoint([x, y], true, true, true);
+      } else {
+        chartT.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/temperature", true);
+  xhttp.send();
+}, 5000 ) ;
+var chartH = new Highcharts.Chart({
+  chart:{ renderTo:'chart-humidity' },
+  title: { text: 'Humidity' },
+  subtitle: { text: 'BME280'},
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    }
+  },
+  xAxis: {
+    type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'Humidity (%)' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      if(chartH.series[0].data.length > 50) {
+        chartH.series[0].addPoint([x, y], true, true, true);
+      } else {
+        chartH.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/humidity", true);
+  xhttp.send();
+}, 5000 ) ;
+var chartP = new Highcharts.Chart({
+  chart:{ renderTo:'chart-pressure' },
+  title: { text: 'Pressure' },
+  subtitle: { text: 'BME280'},
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+    series: { color: '#18009c' }
+  },
+  xAxis: {
+    type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'Pressure (hPa)' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      if(chartP.series[0].data.length > 50) {
+        chartP.series[0].addPoint([x, y], true, true, true);
+      } else {
+        chartP.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/pressure", true);
+  xhttp.send();
+}, 5000 ) ;
+var charteCO2 = new Highcharts.Chart({
+  chart:{ renderTo : 'chart-eCO2' },
+  title: { text: 'eC02' },
+  subtitle: { text: 'CCS811'},
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+    series: { color: '#059e8a' }
+  },
+  xAxis: { type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'CCS811 eC02 (ppm)' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      if(charteCO2.series[0].data.length > 50) {
+        charteCO2.series[0].addPoint([x, y], true, true, true);
+      } else {
+        charteCO2.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/eCO2", true);
+  xhttp.send();
+}, 5000 ) ;
+var chartTVOC = new Highcharts.Chart({
+  chart:{ renderTo : 'chart-TVOC' },
+  title: { text: 'TVOC' },
+  subtitle: { text: 'CCS811'},
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+    series: { color: '#059e8a' }
+  },
+  xAxis: { type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'CCS811 TVOC (ppb)' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      if(chartTVOC.series[0].data.length > 50) {
+        chartTVOC.series[0].addPoint([x, y], true, true, true);
+      } else {
+        chartTVOC.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/TVOC", true);
+  xhttp.send();
+}, 5000 ) ;
+</script>
+</html>
