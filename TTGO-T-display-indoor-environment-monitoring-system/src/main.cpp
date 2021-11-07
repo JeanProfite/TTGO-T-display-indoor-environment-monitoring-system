@@ -10,8 +10,8 @@
 #include <SPI.h>
 
 //____________________WIFI SETUP____________________
-// const char* ssid = "SSID";
-// const char* password = "PASSWORD";
+const char* ssid = "SSID";
+const char* password = "PASSWORD";
 
 //____________________Object Initialization____________________
 Adafruit_CCS811 ccs;
